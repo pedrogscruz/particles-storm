@@ -1,50 +1,54 @@
-# React + TypeScript + Vite
+# The Particles Storm
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The Particles Storm is a React library designed to create stunning SVG-based particle animations. It renders a swarm of dynamic circle elements that move gracefully across the screen. When particles get close to each other, they connect with lines that fade out smoothly as they move apart, providing an engaging and modern visual effect.
 
-Currently, two official plugins are available:
+## Features
+- **Dynamic Motion**: Particles move in random directions with smooth animations.
+- **SVG-Based Rendering**: Utilizes SVG elements for crisp, scalable graphics without relying on canvas.
+- **Interconnectivity**: Lines dynamically appear between particles when they are within a specified distance, and fade elegantly as they separate.
+- **Highly Customizable**: Adjust particle count, size, motion speed, line connection distance, and colors to fit your design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+To add The Particles Storm to your React project, install it via npm or yarn:
+```bash
+npm install particles-storm
+# or
+yarn add particles-storm
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Usage
+Integrating The Particles Storm is quick and easy:
+```jsx
+import ParticleSVG from 'particles-storm';
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+const App = () => (
+  <ParticleSVG
+    width={800}
+    height={600}
+    numParticles={100}
+    lineDistance={120}
+    circleColor="#f39c12"
+    lineColor="rgba(243, 156, 18, 0.6)"
+  />
+);
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+export default App;
 ```
+
+## API
+| Prop           | Type     | Default                   | Description                                |
+|----------------|----------|---------------------------|--------------------------------------------|
+| `width`        | `number` | `800`                     | The width of the SVG container.           |
+| `height`       | `number` | `600`                     | The height of the SVG container.          |
+| `numParticles` | `number` | `100`                     | Number of particles to display.           |
+| `lineDistance` | `number` | `100`                     | Maximum distance for line connections.    |
+| `circleColor`  | `string` | `'#3498db'`              | Color of the particle circles.            |
+| `lineColor`    | `string` | `'rgba(52, 152, 219, 0.5)'` | Color of the connecting lines.            |
+
+## Customization
+The library supports various levels of customization to help you achieve the desired look and feel for your application. Update colors, adjust sizes, and tweak the distance for connections to create unique animations that captivate users.
+
+## Contribution
+The Particles Storm is open source, and contributions are welcome. Help us improve or suggest new features by visiting our GitHub repository.
+
+Bring life to your React applications with **The Particles Storm** and create engaging, interactive experiences with ease!
