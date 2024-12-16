@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
 import ParticlesStorm, { ParticlesStormProps } from './particles-storm';
+import { isTransparent } from '../utils/colors';
 
 type ParticlesStormBackgroundProps = Omit<ParticlesStormProps, 'width' | 'height'>;
 
 const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
   const particlesStormRef = useRef<HTMLCanvasElement>(null)
-  const [stormProps, setStormProps] = useState<{ width: number, height: number, numParticles: number, lineDistance: number }>();
+  const [stormProps, setStormProps] = useState<{ width: number, height: number, numParticles: number, lineDistance: number, backgroundColor: string }>();
 
   useEffect(() => {
     if (!particlesStormRef.current) return
@@ -15,7 +16,7 @@ const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
     particlesStormRef.current.style.position = 'absolute'
     particlesStormRef.current.style.top = '0px'
     particlesStormRef.current.style.left = '0px'
-    particlesStormRef.current.style.zIndex = '-1'
+    particlesStormRef.current.style.zIndex = '0'
 
     const calcProps = () => {
       if (!particlesStormRef.current) return
@@ -24,7 +25,9 @@ const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
       const parentElementArea = width * height
       const numParticles = Math.ceil((parentElementArea + 300000) / 7000)
       const lineDistance = 100
-      setStormProps({ width, height, numParticles, lineDistance })
+      let { backgroundColor } = window.getComputedStyle(particlesStormRef.current.parentElement)
+      backgroundColor = isTransparent(backgroundColor) ? 'white' : backgroundColor
+      setStormProps({ width, height, numParticles, lineDistance, backgroundColor })
     }
 
     calcProps()
@@ -36,10 +39,7 @@ const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
     <ParticlesStorm
       ref={particlesStormRef}
       hidden={stormProps === undefined}
-      width={stormProps?.width}
-      height={stormProps?.height}
-      numParticles={stormProps?.numParticles}
-      lineDistance={stormProps?.lineDistance}
+      {...stormProps}
       {...props}
     />
   );

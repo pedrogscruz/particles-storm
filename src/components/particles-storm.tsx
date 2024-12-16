@@ -1,6 +1,6 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Particle } from '../types/common';
-import { convertToRgba, isWhite } from '../utils/colors';
+import { convertToRgba } from '../utils/colors';
 
 export type ParticlesStormProps = {
   width?: number
@@ -24,7 +24,7 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
   circleColor = '#3498db',
   lineColor = 'rgb(52, 152, 219)',
   backgroundColor = 'white',
-  speed = 2,
+  speed = 16,
   drift = 0.35,
   sizeRange = [2, 4],
   hidden
@@ -57,13 +57,7 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
     }
 
     const draw = () => {
-      if (isWhite(backgroundColor)) {
-        ctx.clearRect(0, 0, width, height);
-      }
-      else {
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      ctx.clearRect(0, 0, width, height);
 
       // Draw particles
       particles.forEach((p) => {
