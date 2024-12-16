@@ -25,7 +25,7 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
   lineColor = 'rgb(52, 152, 219)',
   backgroundColor = 'white',
   speed = 16,
-  drift = 0.35,
+  drift = 0.15,
   sizeRange = [2, 4],
   hidden
 }, ref) => {
@@ -94,23 +94,35 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
       particles.sort((a, b) => a.size > b.size ? -1 : b.size > a.size ? 1 : 0)
 
       particles.forEach((p, i) => {
-        // Draw lines between close particles
-        for (let j = i + 1; j < particles.length; j++) {
+        for (let j = i-1; j >= 0; j--) {
           const other = particles[j]
-          const dist = Math.sqrt(Math.pow(p.x - other.x, 2) + Math.pow(p.y - other.y, 2));
+          const dx = other.x - p.x;
+          const dy = other.y - p.y;
+          const dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
           if (dist > lineDistance) continue
 
-          const gradient = ctx.createLinearGradient(p.x, p.y, other.x, other.y);
+          // Calculate the normalized direction vector
+          const nx = dx / dist;
+          const ny = dy / dist;
+
+          // Adjust the starting and ending points to avoid intersection with circles
+          const startX = p.x + nx * p.size;
+          const startY = p.y + ny * p.size;
+          const endX = other.x - nx * other.size;
+          const endY = other.y - ny * other.size;
+
+          // Create the gradient for the line
+          const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
           const blurFactor = Math.max(p.blurLevel, other.blurLevel) / blurLevelMax;
 
-          
           gradient.addColorStop(0, convertToRgba(lineColor, 1 - blurFactor));
           gradient.addColorStop(1, convertToRgba(lineColor, 1 - other.blurLevel / blurLevelMax));
 
+          // Draw the line
           ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(other.x, other.y);
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
           ctx.strokeStyle = gradient;
           ctx.lineWidth = 1;
           ctx.shadowBlur = Math.max(p.blurLevel, other.blurLevel);
@@ -118,12 +130,6 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
           ctx.stroke();
           ctx.closePath();
         }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = backgroundColor
-        ctx.fill();
-        ctx.closePath();
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
