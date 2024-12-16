@@ -11,10 +11,10 @@ export function convertToRgba(color: string, opacity: number) {
   }
 }
 
-export function isWhite (color: string) {
+export function isTransparent(color: string) {
   try {
-    const rgb = chroma(color).rgb();
-    return rgb[0] === 255 && rgb[1] === 255 && rgb[2] === 255;
+    const rgb = chroma(color).rgba();
+    return rgb[3] === 0;
   } catch (error) {
     console.error('Invalid color input:', error);
     return false;
