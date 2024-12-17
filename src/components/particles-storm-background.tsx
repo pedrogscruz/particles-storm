@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import ParticlesStorm, { ParticlesStormProps } from './particles-storm';
-import { isTransparent } from '../utils/colors';
 
 type ParticlesStormBackgroundProps = Omit<ParticlesStormProps, 'width' | 'height'>;
 
 const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
   const particlesStormRef = useRef<HTMLCanvasElement>(null)
-  const [stormProps, setStormProps] = useState<{ width: number, height: number, numParticles: number, lineDistance: number, backgroundColor: string }>();
+  const [stormProps, setStormProps] = useState<{ width: number, height: number, numParticles: number, lineDistance: number }>();
 
   useEffect(() => {
     if (!particlesStormRef.current) return
@@ -25,9 +24,7 @@ const ParticlesStormBackground = (props: ParticlesStormBackgroundProps) => {
       const parentElementArea = width * height
       const numParticles = Math.ceil((parentElementArea + 300000) / 7000)
       const lineDistance = 100
-      let { backgroundColor } = window.getComputedStyle(particlesStormRef.current.parentElement)
-      backgroundColor = isTransparent(backgroundColor) ? 'white' : backgroundColor
-      setStormProps({ width, height, numParticles, lineDistance, backgroundColor })
+      setStormProps({ width, height, numParticles, lineDistance })
     }
 
     calcProps()

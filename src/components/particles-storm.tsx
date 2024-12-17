@@ -1,6 +1,7 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { Particle } from '../types/common';
 import { convertToRgba } from '../utils/colors';
+import type { DetailedHTMLProps, CanvasHTMLAttributes } from 'react';
+import type { Particle } from '../types/common';
 
 export type ParticlesStormProps = {
   width?: number
@@ -9,12 +10,11 @@ export type ParticlesStormProps = {
   lineDistance?: number
   circleColor?: string
   lineColor?: string
-  backgroundColor?: string
   speed?: number
   drift?: number
   sizeRange?: [number, number]
   hidden?: boolean
-};
+} & DetailedHTMLProps<CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>;
 
 const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
   width = 800,
@@ -23,11 +23,12 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
   lineDistance = 15,
   circleColor = '#3498db',
   lineColor = 'rgb(52, 152, 219)',
-  backgroundColor = 'white',
   speed = 16,
   drift = 0.15,
   sizeRange = [2, 4],
-  hidden
+  hidden,
+  style,
+  ...canvasProps
 }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -152,7 +153,6 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
     lineColor,
     hidden,
     speed,
-    backgroundColor,
     sizeRange,
     drift
   ]);
@@ -163,9 +163,10 @@ const ParticlesStorm = forwardRef<HTMLCanvasElement, ParticlesStormProps>(({
   return (
     <canvas
       ref={canvasRef}
-      style={hidden ? { display: 'none' } : undefined}
+      style={hidden ? { ...style, display: 'none' } : style}
       width={width}
       height={height}
+      {...canvasProps}
     />
   );
 });
