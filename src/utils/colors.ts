@@ -10,13 +10,3 @@ export function convertToRgba(color: string, opacity: number) {
     return `rgba(52, 152, 219, ${opacity})`;
   }
 }
-
-export function isTransparent(color: string) {
-  try {
-    const rgb = chroma(color).rgba();
-    return rgb[3] === 0;
-  } catch (error) {
-    console.error('Invalid color input:', error);
-    return false;
-  }
-}
